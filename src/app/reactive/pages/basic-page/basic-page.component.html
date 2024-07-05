@@ -4,21 +4,31 @@
 <div class="row">
     <div class="col">
 
-        <form autocomplete="off">
+        <form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onSave()">
 
             <!-- Campo de producto -->
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Producto</label>
                 <div class="col-sm-9">
 
-                    <input type="text"
+                    <input formControlName="name" type="text"
                            class="form-control"
                            placeholder="Nombre del producto">
 
-                    <span class="form-text text-danger">
-                        <!-- Debe de ser de 3 letras -->
-                        error message
+                    <!-- ESTA FORMA ES HORRIBLE DE MOSTRAR LOS MENSAJES!!! -->
+                    <!-- <span *ngIf="myForm.controls['name'].getError('required') && myForm.controls['name'].touched" class="form-text text-danger">
+                        Este campo es requerido
                     </span>
+
+                    <span *ngIf="myForm.controls['name'].getError('minlength') && myForm.controls['name'].touched" class="form-text text-danger">
+                        Este campo requiere mínimo 3 letras
+                    </span> -->
+
+                    <!-- MEJOR ESTA JAJA -->
+                    <span *ngIf="isValidField('name')" class="form-text text-danger">
+                      {{getFieldError('name')}}
+                    </span>
+
                 </div>
             </div>
 
@@ -26,11 +36,12 @@
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Precio</label>
                 <div class="col-sm-9">
-                    <input type="number"
+                    <input formControlName="price" type="number"
                            class="form-control"
                            placeholder="Precio del producto">
-                    <span class="form-text text-danger">
-                        El precio debe de ser 0 o mayor
+                    <span *ngIf="isValidField('price')" class="form-text text-danger">
+                      <!-- Este texto se podria hacer dinamico con el metodo getFieldError -->
+                      El precio debe de ser 0 o mayor
                     </span>
                 </div>
             </div>
@@ -39,12 +50,12 @@
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Existencias</label>
                 <div class="col-sm-9">
-                    <input type="number"
+                    <input formControlName="inStorage" type="number"
                            class="form-control"
                            placeholder="Existencias del producto">
-
-                    <span class="form-text text-danger">
-                         Las existencias deben de ser 0 o mayor
+                    <span *ngIf="isValidField('inStorage')" class="form-text text-danger">
+                      <!-- Este texto se podria hacer dinamico con el metodo getFieldError -->
+                      Las existencias deben ser 0 o mayor
                     </span>
                 </div>
             </div>
@@ -73,21 +84,34 @@
     <div class="col">
 
         <span>Valid</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <pre>{{ myForm.valid | json }}</pre>
 
         <span>Pristine</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <pre>{{ myForm.pristine| json }}</pre>
 
         <span>Touched</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <pre>{{ myForm.touched| json }}</pre>
 
         <span>Value</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <pre>{{ myForm.value| json }}</pre>
+
+        <span>Nombre</span>
+        <pre>{{ myForm.controls['name'].value | json }}</pre>
+
+        <span>Nombre - Errors</span>
+        <pre>{{ myForm.controls['name'].errors | json }}</pre>
 
         <span>Precio</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <pre>{{ myForm.controls['price'].value | json }}</pre>
 
-        <span>Producto</span>
-        <pre>{{ 'objeto' | json }}</pre>
+        <span>Precio - Errors</span>
+        <pre>{{ myForm.controls['price'].errors | json }}</pre>
+
+        <span>Existencias</span>
+        <pre>{{ myForm.controls['inStorage'].value | json }}</pre>
+
+        <span>Existencias - Errors</span>
+        <pre>{{ myForm.controls['inStorage'].errors | json }}</pre>
+
     </div>
 </div>
